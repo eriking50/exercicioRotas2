@@ -10,9 +10,9 @@ export interface OnibusDto {
 }
 
 export interface OnibusAtualizarDto {
-    marca?: string,
-    ano?: number,
-    numeroAssentos?: number,
-    placa?: string,
-    status?: OnibusStatus
-  }
+  marca?: string,
+  ano?: number,
+  numeroAssentos?: number,
+  placa?: string,
+  status?: OnibusStatus
+}
