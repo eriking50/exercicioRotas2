@@ -1,4 +1,7 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
+import { Onibus } from "./OnibusEntity";
+import { Usuario } from "./UsuarioEntity";
+import { Viagem } from "./ViagemEntity";
 
 @Entity()
 export class Viacao {
@@ -13,4 +16,13 @@ export class Viacao {
 
   @Column({ unique: true })
   cnpj: string;
+
+  @OneToMany(() => Onibus, onibus => onibus.viacao)
+  frota: Onibus[];
+
+  @OneToMany(() => Viagem, viagem => viagem.viacao)
+  viagens: Viagem[];
+
+  @OneToMany(() => Usuario, usuario => usuario.viacao)
+  funcionarios: Usuario[];
 }
