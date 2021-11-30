@@ -1,10 +1,11 @@
 Geral:
   [] Implementar erros próprios
   [] Apagar exemplos do Paulo do boilerplate
+  [] Montar validação de dados de texto
 Onibus:
-  [] Atualizar criação de onibus depois que implementar viacao repo
+  ✔ Atualizar criação de onibus depois que implementar viacao repo @done(21-11-30 20:33)
 Viacao:
-  
+  ✔ Remover campo de quantidade de onibus @done(21-11-30 20:46)
 Viagem:
   
 Usuario:

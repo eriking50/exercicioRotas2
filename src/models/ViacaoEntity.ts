@@ -11,9 +11,6 @@ export class Viacao {
   @Column()
   nome: string;
 
-  @Column()
-  quantidadeOnibus: string;
-
   @Column({ unique: true })
   cnpj: string;
 

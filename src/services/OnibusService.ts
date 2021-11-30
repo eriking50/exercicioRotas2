@@ -14,7 +14,7 @@ export class OnibusService implements IOnibusService {
   ) {}
 
   async criarOnibus(dadosOnibus: OnibusDto): Promise<Onibus> {
-    const viacao = new Viacao() //TODO: atualizar qndo implementar repository
+    const viacao = await this.viacaoRepository.findById(dadosOnibus.viacaoId);
     if (!viacao) {
       throw new Error("Viação não encontrada");
     }
