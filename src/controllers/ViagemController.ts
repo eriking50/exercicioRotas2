@@ -6,6 +6,7 @@ import { ViagemNaoEncontrada } from "../@types/errors/ViagemNaoEncontrada";
 import { ViacaoInvalida } from "../@types/errors/ViacaoInvalida";
 import { ViagemInativa } from "../@types/errors/ViagemInativa";
 import { ViagemSemAssentos } from "../@types/errors/ViagemSemAssentos";
+import { ViagemFiltroDto } from "../@types/dto/ViagemFiltroDto";
 
 @Service('ViagemController')
 export class ViagemController {
@@ -50,7 +51,14 @@ export class ViagemController {
   }
   async listarViagem(request: Request, response: Response): Promise<void> {
     try {
-      const viagens = await this.viagemService.listarViagens();
+      const { dataInicio, dataFinal, origem, destino } = request.query;
+      const filtro: ViagemFiltroDto = {
+        origem: origem.toString(),
+        destino: destino.toString(),
+        dataInicio: dataInicio ? new Date(dataInicio.toString()) : null,
+        dataFinal: dataFinal ? new Date(dataFinal.toString()) : null
+      }
+      const viagens = await this.viagemService.listarViagens(filtro);
       response.status(200).send(viagens);
     } catch (error) {
       throw error;

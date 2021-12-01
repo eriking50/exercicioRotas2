@@ -12,6 +12,7 @@ import { ViagemNaoEncontrada } from "../@types/errors/ViagemNaoEncontrada";
 import { ViacaoInvalida } from "../@types/errors/ViacaoInvalida";
 import { ViagemInativa } from "../@types/errors/ViagemInativa";
 import { ViagemSemAssentos } from "../@types/errors/ViagemSemAssentos";
+import { ViagemFiltroDto } from "../@types/dto/ViagemFiltroDto";
 
 @Service('ViagemService')
 export class ViagemService implements IViagemService {
@@ -63,12 +64,24 @@ export class ViagemService implements IViagemService {
     await this.viagemRepository.update(idViagem, viagem);
   }
 
-  async listarViagens():Promise<Viagem[]> {
-    const viagens = await this.viagemRepository.findAll();
+  async listarViagens(filtro: ViagemFiltroDto): Promise<Viagem[]> {
+    filtro = this.validarFiltro(filtro);
+    const viagens = await this.viagemRepository.findAll(filtro);
     if (!viagens) {
       return [];
     }
     return viagens;
+  }
+
+  private validarFiltro(filtro: ViagemFiltroDto): ViagemFiltroDto {
+    if (!filtro.dataFinal) {
+      filtro.dataFinal = new Date();
+    }
+    if (!filtro.dataInicio) {
+      filtro.dataInicio = new Date();
+    }
+    filtro.dataFinal.setDate(filtro.dataInicio.getDate() + 7);
+    return filtro;
   }
 
   private viagemFactory(dadosViagem: ViagemDto, onibus: Onibus, viacao: Viacao): Viagem {
