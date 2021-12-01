@@ -5,6 +5,8 @@ import { OnibusAtualizarDto, OnibusDto } from "../@types/dto/OnibusDto";
 import { IViacaoRepository } from "../@types/repositories/IViacaoRepository";
 import { Onibus } from "../models/OnibusEntity";
 import { Viacao } from "../models/ViacaoEntity";
+import { ViacaoNaoEncontrada } from "../@types/errors/ViacaoNaoEncontrada";
+import { OnibusNaoEncontrado } from "../@types/errors/OnibusNaoEncontrado";
 
 @Service('OnibusService')
 export class OnibusService implements IOnibusService {
@@ -16,7 +18,7 @@ export class OnibusService implements IOnibusService {
   async criarOnibus(dadosOnibus: OnibusDto): Promise<Onibus> {
     const viacao = await this.viacaoRepository.findById(dadosOnibus.viacaoId);
     if (!viacao) {
-      throw new Error("Viação não encontrada");
+      throw new ViacaoNaoEncontrada();
     }
     const onibus = this.onibusFactory(dadosOnibus, viacao);
     return await this.onibusRepository.save(onibus);
@@ -25,7 +27,7 @@ export class OnibusService implements IOnibusService {
   async atualizarOnibus(idOnibus: number, dadosOnibus: OnibusAtualizarDto): Promise<void> {
     const onibus = this.onibusRepository.findById(idOnibus);
     if (!onibus) {
-      throw new Error("Onibus não encontrado");
+      throw new OnibusNaoEncontrado();
     }
     await this.onibusRepository.update(idOnibus, dadosOnibus);
   }
