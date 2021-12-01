@@ -11,7 +11,7 @@ const crateRouter = () => {
   router.get('', (req, res) => getController().listarOnibus(req, res));
   router.get('/:id', (req, res) => getController().buscarOnibus(req, res));
   router.post('', (req, res) => getController().adicionarOnibus(req, res));
-  router.patch('', (req, res) => getController().atualizarOnibus(req, res));
+  router.patch('/:id', (req, res) => getController().atualizarOnibus(req, res));
 
   return router;
 };
