@@ -8,6 +8,11 @@ const getController = (): UsuarioController => {
 };
 
 const crateRouter = () => {
+  router.get('/:id', (req, res) => getController().buscarUsuario(req, res));
+  router.post('', (req, res) => getController().adicionarUsuario(req, res));
+  router.patch('/:id', (req, res) => getController().atualizarUsuario(req, res));
+  router.delete('/:id', (req, res) => getController().removerUsuario(req, res));
+
   return router;
 };
 

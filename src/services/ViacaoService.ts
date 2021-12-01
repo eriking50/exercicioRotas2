@@ -3,6 +3,7 @@ import { IViacaoService } from "../@types/services/IViacaoService";
 import { IViacaoRepository } from "../@types/repositories/IViacaoRepository";
 import { ViacaoDto, ViacaoAtualizarDto } from "../@types/dto/ViacaoDto";
 import { Viacao } from "models/ViacaoEntity";
+import { ViacaoNaoEncontrada } from "../@types/errors/ViacaoNaoEncontrada";
 
 @Service('ViacaoService')
 export class ViacaoService implements IViacaoService {
@@ -16,7 +17,7 @@ export class ViacaoService implements IViacaoService {
   async atualizarViacao(idViacao: number, dadosViacao: ViacaoAtualizarDto): Promise<void> {
     const viacao = this.viacaoRepository.findById(idViacao);
     if (!viacao) {
-      throw new Error("Viação não encontrada");
+      throw new ViacaoNaoEncontrada();
     }
     await this.viacaoRepository.update(idViacao, dadosViacao);
   }

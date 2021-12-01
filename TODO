@@ -1,13 +1,13 @@
 Geral:
-  [] Implementar erros próprios
+  ✔ Implementar erros próprios @done(21-12-01 16:21)
   [] Apagar exemplos do Paulo do boilerplate
-  [] Montar validação de dados de texto
 Onibus:
   ✔ Atualizar criação de onibus depois que implementar viacao repo @done(21-11-30 20:33)
 Viacao:
   ✔ Remover campo de quantidade de onibus @done(21-11-30 20:46)
 Viagem:
   ✔ Atualizar reserva de onibus quando implementar usuario repo @done(21-12-01 13:29)
-  [] Alterar depois o listar viagens para que eu receba parametros da query
+  ✔ Alterar depois o listar viagens para que eu receba parametros da query @done(21-12-01 16:56)
+  [] Alterar para receber o id do usuário pelo token
 Usuario:
   
