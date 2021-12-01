@@ -7,14 +7,15 @@ import { ViacaoInvalida } from "../@types/errors/ViacaoInvalida";
 import { ViagemInativa } from "../@types/errors/ViagemInativa";
 import { ViagemSemAssentos } from "../@types/errors/ViagemSemAssentos";
 import { ViagemFiltroDto } from "../@types/dto/ViagemFiltroDto";
+import { RequestWithUsuario } from "../@types/middlewares/requestUserData";
 
 @Service('ViagemController')
 export class ViagemController {
   constructor(@Inject('ViagemService') private viagemService: IViagemService) {}
 
-  async adicionarViagem(request: Request, response: Response): Promise<void> {
+  async adicionarViagem(request: RequestWithUsuario, response: Response): Promise<void> {
     try {
-      const idUsuario = 1; //enviar via token id do usuário
+      const idUsuario = request.usuario.id;
       const viagem = await this.viagemService.criarViagem(request.body, idUsuario);
       response.status(201).send(viagem);
     } catch (error) {
@@ -24,10 +25,10 @@ export class ViagemController {
       throw error;
     }
   }
-  async atualizarViagem(request: Request, response: Response): Promise<void> {
+  async atualizarViagem(request: RequestWithUsuario, response: Response): Promise<void> {
     try {
       const { id } = request.params;
-      const idUsuario = 1; //enviar via token id do usuário
+      const idUsuario = request.usuario.id;
       await this.viagemService.atualizarViagem(Number(id), request.body, idUsuario);
       response.status(204).send();
     } catch (error) {
@@ -64,10 +65,10 @@ export class ViagemController {
       throw error;
     }
   }
-  async reservarAssento(request: Request, response: Response): Promise<void> {
+  async reservarAssento(request: RequestWithUsuario, response: Response): Promise<void> {
     try {
       const { id } = request.params;
-      const idUsuario = 1; //enviar via token id do usuário
+      const idUsuario = request.usuario.id;
       await this.viagemService.reservarAssento(Number(id), idUsuario);
       response.status(200).send("Assento reservado com sucesso");
     } catch (error) {

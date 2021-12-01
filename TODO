@@ -8,6 +8,6 @@ Viacao:
 Viagem:
   ✔ Atualizar reserva de onibus quando implementar usuario repo @done(21-12-01 13:29)
   ✔ Alterar depois o listar viagens para que eu receba parametros da query @done(21-12-01 16:56)
-  [] Alterar para receber o id do usuário pelo token
+  ✔ Alterar para receber o id do usuário pelo token @done(21-12-01 18:16)
 Usuario:
   

@@ -20,3 +20,14 @@ export interface UsuarioAtualizarDto {
   nome?: string,
   senha?: string
 }
+
+export interface UsuarioLogadoDTO {
+  id: number,
+  email: string,
+  role?: Roles
+}
+
+export interface LoginDto {
+  email: string,
+  senha: string
+}

@@ -1,13 +1,26 @@
 import { Inject, Service } from "typedi";
-import {Request, Response} from "express";
+import {request, Request, Response} from "express";
 import { IUsuarioService } from "../@types/services/IUsuarioService";
 import { ViacaoNaoEncontrada } from "../@types/errors/ViacaoNaoEncontrada";
 import { UsuarioNaoEncontrado } from "../@types/errors/UsuarioNaoEncontrado";
 import { EmailInvalido } from "../@types/errors/EmailInvalido";
+import { EmailOuSenhaNaoEncontrados } from "../@types/errors/EmailOuSenhaNaoEncontrados";
 
 @Service('UsuarioController')
 export class UsuarioController {
   constructor(@Inject('UsuarioService') private usuarioService: IUsuarioService) {}
+
+  async autenticarUsuario(request: Request, response: Response) {
+    try {
+      const token = await this.usuarioService.autenticarUsuario(request.body);
+      response.status(201).send(token);
+    } catch (error) {
+      if (error instanceof EmailOuSenhaNaoEncontrados) {
+        response.status(422).send("Email ou Senha não encontrados");
+      }
+      throw error;
+    }
+  }
 
   async adicionarUsuario(request: Request, response: Response): Promise<void> {
     try {

@@ -1,7 +1,7 @@
 import { IUsuarioRepository } from "../@types/repositories/IUsuarioRepository";
 import { IUsuarioService } from "../@types/services/IUsuarioService";
 import { Inject, Service } from "typedi";
-import { UsuarioAtualizarDto, UsuarioDto, UsuarioRetornoDto } from "../@types/dto/UsuarioDto";
+import { LoginDto, UsuarioAtualizarDto, UsuarioDto, UsuarioLogadoDTO, UsuarioRetornoDto } from "../@types/dto/UsuarioDto";
 import { IViacaoRepository } from "../@types/repositories/IViacaoRepository";
 import { Viacao } from "../models/ViacaoEntity";
 import { Usuario } from "../models/UsuarioEntity";
@@ -10,10 +10,14 @@ import { validarEmail } from "../helpers/ValidarEmail";
 import { ViacaoNaoEncontrada } from "../@types/errors/ViacaoNaoEncontrada";
 import { UsuarioNaoEncontrado } from "../@types/errors/UsuarioNaoEncontrado";
 import { EmailInvalido } from "../@types/errors/EmailInvalido";
+import { EmailOuSenhaNaoEncontrados } from "../@types/errors/EmailOuSenhaNaoEncontrados";
+import { TokenDTO } from "../@types/dto/TokenDTO";
+import { TokenService } from "./TokenService";
 
 @Service('UsuarioService')
 export class UsuarioService implements IUsuarioService {
   constructor(
+    @Inject('TokenService') private tokenService: TokenService,
     @Inject('UsuarioRepository') private usuarioRepository: IUsuarioRepository,
     @Inject('ViacaoRepository') private viacaoRepository: IViacaoRepository
   ) {}
@@ -57,6 +61,22 @@ export class UsuarioService implements IUsuarioService {
     return await this.usuarioRepository.findById(idUsuario);
   }
 
+  async autenticarUsuario(login: LoginDto): Promise<TokenDTO> {
+    const usuario = await this.usuarioRepository.findByEmail(login.email);
+    if (!usuario) {
+      throw new EmailOuSenhaNaoEncontrados();
+    }
+    if (usuario.hashSenha !== hashSenha(login.senha)) {
+      throw new EmailOuSenhaNaoEncontrados();
+    }
+    const usuarioLogado: UsuarioLogadoDTO = {
+      email: usuario.email,
+      id: usuario.id,
+      role: usuario.role
+    }
+    return this.tokenService.gerarToken(usuarioLogado);
+  }
+
   private usuarioFactory(dadosUsuario: UsuarioDto, viacao?: Viacao): Usuario {
     const usuario = new Usuario();
     if (!validarEmail(dadosUsuario.email)) {
@@ -69,6 +89,7 @@ export class UsuarioService implements IUsuarioService {
     usuario.role = dadosUsuario.role ? dadosUsuario.role : 0;
     return usuario;
   }
+
 
   private gerarRetornoUsuario(usuario: Usuario): UsuarioRetornoDto {
     return {

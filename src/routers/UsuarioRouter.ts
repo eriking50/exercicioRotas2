@@ -8,6 +8,7 @@ const getController = (): UsuarioController => {
 };
 
 const crateRouter = () => {
+  router.post('/singin', (req, res) => getController().autenticarUsuario(req, res));
   router.get('/:id', (req, res) => getController().buscarUsuario(req, res));
   router.post('', (req, res) => getController().adicionarUsuario(req, res));
   router.patch('/:id', (req, res) => getController().atualizarUsuario(req, res));

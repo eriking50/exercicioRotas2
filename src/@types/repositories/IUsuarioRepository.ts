@@ -7,5 +7,6 @@ export interface IUsuarioRepository {
   save(usuario: Usuario): Promise<Usuario>;
   update(idUsuario: number, partialEntity: QueryDeepPartialEntity<Usuario>): Promise<UpdateResult>;
   findById(idUsuario: number): Promise<Usuario>;
+  findByEmail(email: string): Promise<Usuario>;
   remove(usuario: Usuario): Promise<Usuario>;
 }
