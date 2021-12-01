@@ -3,10 +3,10 @@ import { IUsuarioService } from "../@types/services/IUsuarioService";
 import { Inject, Service } from "typedi";
 import { UsuarioAtualizarDto, UsuarioDto, UsuarioRetornoDto } from "../@types/dto/UsuarioDto";
 import { IViacaoRepository } from "../@types/repositories/IViacaoRepository";
-import { Viacao } from "models/ViacaoEntity";
-import { Usuario } from "models/UsuarioEntity";
-import { hashSenha } from "helpers/HashSenha";
-import { validarEmail } from "helpers/ValidarEmail";
+import { Viacao } from "../models/ViacaoEntity";
+import { Usuario } from "../models/UsuarioEntity";
+import { hashSenha } from "../helpers/HashSenha";
+import { validarEmail } from "../helpers/ValidarEmail";
 
 @Service('UsuarioService')
 export class UsuarioService implements IUsuarioService {
