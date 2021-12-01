@@ -7,6 +7,7 @@ Onibus:
 Viacao:
   ✔ Remover campo de quantidade de onibus @done(21-11-30 20:46)
 Viagem:
-  
+  [] Atualizar reserva de onibus quando implementar usuario repo
+  [] Alterar depois o listar viagens para que eu receba parametros da query
 Usuario:
   

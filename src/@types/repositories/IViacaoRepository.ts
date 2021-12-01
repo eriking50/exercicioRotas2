@@ -6,5 +6,5 @@ export interface IViacaoRepository {
   save(viacao: Viacao): Promise<Viacao>;
   findById(idViacao: number): Promise<Viacao>;
   findAll(): Promise<Viacao[]>;
-  update(idOnibus: number, partialEntity: QueryDeepPartialEntity<Viacao>): Promise<UpdateResult>;
+  update(idViacao: number, partialEntity: QueryDeepPartialEntity<Viacao>): Promise<UpdateResult>;
 }

@@ -25,7 +25,7 @@ export class ViacaoService implements IViacaoService {
     return this.viacaoRepository.findById(idViacao);
   }
 
-  async listarViacao(): Promise<Viacao[]> {
+  async listarViacoes(): Promise<Viacao[]> {
     const viacoes = this.viacaoRepository.findAll();
     if (!viacoes) {
       return [];
