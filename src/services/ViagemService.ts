@@ -34,7 +34,7 @@ export class ViagemService implements IViagemService {
     if (!viagem) {
       throw new Error("Viagem não encontrada");
     }
-    const usuario = new Usuario(); // atualizar quando eu fazer o repo de usuario, pegar com a viação junto
+    const usuario = await this.usuarioRepository.findByIdWithViacao(idUsuario);
     if (usuario.viacao.id !== viagem.viacao.id) {
       throw new Error("Você não pode alterar uma viação que não seja a sua");
     }
@@ -53,7 +53,7 @@ export class ViagemService implements IViagemService {
     if (viagem.usuarios.length >= viagem.totalVagas) {
       throw new Error("A viagem não tem assentos disponíveis");
     }
-    const usuario = new Usuario(); // atualizar quando eu fazer o repo de usuario
+    const usuario = await this.usuarioRepository.findById(idUsuario);
     viagem.usuarios.push(usuario);
     await this.viagemRepository.update(idViagem, viagem);
   }
