@@ -38,8 +38,8 @@ export class ViacaoController {
   }
   async listarViacao(request: Request, response: Response): Promise<void> {
     try {
-      const viacao = await this.viacaoService.listarViacoes();
-      response.status(200).send(viacao);
+      const viacoes = await this.viacaoService.listarViacoes();
+      response.status(200).send(viacoes);
     } catch (error) {
       throw error;
     }

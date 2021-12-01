@@ -42,8 +42,8 @@ export class OnibusController {
   }
   async listarOnibus(request: Request, response: Response): Promise<void> {
     try {
-      const onibus = await this.onibusService.listarOnibus();
-      response.status(200).send(onibus);
+      const frota = await this.onibusService.listarOnibus();
+      response.status(200).send(frota);
     } catch (error) {
       throw error;
     }

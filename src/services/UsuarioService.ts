@@ -7,6 +7,9 @@ import { Viacao } from "../models/ViacaoEntity";
 import { Usuario } from "../models/UsuarioEntity";
 import { hashSenha } from "../helpers/HashSenha";
 import { validarEmail } from "../helpers/ValidarEmail";
+import { ViacaoNaoEncontrada } from "../@types/errors/ViacaoNaoEncontrada";
+import { UsuarioNaoEncontrado } from "../@types/errors/UsuarioNaoEncontrado";
+import { EmailInvalido } from "../@types/errors/EmailInvalido";
 
 @Service('UsuarioService')
 export class UsuarioService implements IUsuarioService {
@@ -20,13 +23,13 @@ export class UsuarioService implements IUsuarioService {
     if (dadosUsuario?.viacaoId) {
       viacao = await this.viacaoRepository.findById(dadosUsuario.viacaoId);
       if (!viacao) {
-        throw new Error("Viação não encontrada");
+        throw new ViacaoNaoEncontrada();
       }
     }
     if (idViacao) {
       viacao = await this.viacaoRepository.findById(idViacao);
       if (!viacao) {
-        throw new Error("Viação não encontrada");
+        throw new ViacaoNaoEncontrada();
       }
     }
     const usuario = this.usuarioFactory(dadosUsuario, viacao);
@@ -37,7 +40,7 @@ export class UsuarioService implements IUsuarioService {
   async atualizarUsuario(idUsuario: number, dadosUsuario: UsuarioAtualizarDto): Promise<void> {
     const usuario = this.usuarioRepository.findById(idUsuario);
     if (!usuario) {
-      throw new Error("Usuário não encontrado");
+      throw new UsuarioNaoEncontrado();
     }
     await this.usuarioRepository.update(idUsuario, dadosUsuario);
   }
@@ -45,7 +48,7 @@ export class UsuarioService implements IUsuarioService {
   async removerUsuario(idUsuario: number): Promise<void> {
     const usuario = await this.usuarioRepository.findById(idUsuario);
     if (!usuario) {
-      throw new Error("Usuário não encontrado");
+      throw new UsuarioNaoEncontrado();
     }
     await this.usuarioRepository.remove(usuario);
   }
@@ -57,7 +60,7 @@ export class UsuarioService implements IUsuarioService {
   private usuarioFactory(dadosUsuario: UsuarioDto, viacao?: Viacao): Usuario {
     const usuario = new Usuario();
     if (!validarEmail(dadosUsuario.email)) {
-      throw new Error("Email inválido");
+      throw new EmailInvalido();
     }
     usuario.email = dadosUsuario.email;
     usuario.hashSenha = hashSenha(dadosUsuario.senha);
