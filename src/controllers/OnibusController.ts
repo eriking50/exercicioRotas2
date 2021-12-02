@@ -48,7 +48,7 @@ export class OnibusController {
         return;
       }
       if (error instanceof UpdateValuesMissingError) {
-        response.status(422).send("Você não pode passar um objeto vazio");
+        response.status(400).send("Você não pode passar um objeto vazio");
         return;
       }
       throw error;
