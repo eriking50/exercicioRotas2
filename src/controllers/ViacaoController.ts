@@ -2,6 +2,9 @@ import { Inject, Service } from "typedi";
 import {Request, Response} from "express";
 import { IViacaoService } from "../@types/services/IViacaoService";
 import { ViacaoNaoEncontrada } from "../@types/errors/ViacaoNaoEncontrada";
+import { RequestWithUsuario } from "../@types/middlewares/requestUserData";
+import { ViacaoInvalida } from "../@types/errors/ViacaoInvalida";
+import { UpdateValuesMissingError } from "typeorm";
 
 @Service('ViacaoController')
 export class ViacaoController {
@@ -15,14 +18,27 @@ export class ViacaoController {
       throw error;
     }
   }
-  async atualizarViacao(request: Request, response: Response): Promise<void> {
+  async atualizarViacao(request: RequestWithUsuario, response: Response): Promise<void> {
     try {
       const { id } = request.params;
-      await this.viacaoService.atualizarViacao(Number(id), request.body);
+      await this.viacaoService.atualizarViacao(Number(id), request.body, request?.usuario?.id);
       response.status(204).send();
     } catch (error) {
       if (error instanceof ViacaoNaoEncontrada) {
         response.status(404).send("Viacao não encontrada no sistema");
+        return;
+      }
+      if (error instanceof ViacaoInvalida) {
+        response.status(422).send("Você não pode atualizar uma viação que não seja a sua");
+        return;
+      }
+      if (error instanceof UpdateValuesMissingError) {
+        response.status(422).send("Você não pode passar um objeto vazio");
+        return;
+      }
+      if (error?.code === "ER_NO_DEFAULT_FOR_FIELD") {
+        response.status(400).send("Há campos obrigatórios que não foram informados");
+        return;
       }
       throw error;
     }

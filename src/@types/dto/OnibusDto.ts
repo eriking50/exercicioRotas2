@@ -5,8 +5,7 @@ export interface OnibusDto {
   ano: number,
   numeroAssentos: number,
   placa: string,
-  status?: OnibusStatus,
-  viacaoId: number
+  status?: OnibusStatus
 }
 
 export interface OnibusAtualizarDto {
