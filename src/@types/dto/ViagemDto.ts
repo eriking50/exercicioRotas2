@@ -7,9 +7,6 @@ export interface ViagemDto {
 }
 
 export interface ViagemAtualizarDto {
-  totalVagas?: number,
   dataPartida?: Date,
-  origem?: string,
-  destino?: string,
-  onibusId?: number
+  ativo?: boolean
 }

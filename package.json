@@ -1,7 +1,7 @@
 {
-   "name": "raro-academy-boilerplate",
-   "version": "0.0.1",
-   "description": "Boilerplate para o projeto final da Raro Academy nodejs.",
+   "name": "exercicio-rotas",
+   "version": "1.0.0",
+   "description": "Exercício de rotas feito com base no boilerplate",
    "devDependencies": {
       "@types/axios": "^0.14.0",
       "@types/body-parser": "^1.19.1",

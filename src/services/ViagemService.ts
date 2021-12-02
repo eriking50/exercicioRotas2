@@ -13,6 +13,9 @@ import { ViacaoInvalida } from "../@types/errors/ViacaoInvalida";
 import { ViagemInativa } from "../@types/errors/ViagemInativa";
 import { ViagemSemAssentos } from "../@types/errors/ViagemSemAssentos";
 import { ViagemFiltroDto } from "../@types/dto/ViagemFiltroDto";
+import { OnibusInvalido } from "../@types/errors/OnibusInvalido";
+import { IsReservado } from "../@types/errors/IsReservado";
+import { DataInvalida } from "../@types/errors/DataInvalida";
 
 @Service('ViagemService')
 export class ViagemService implements IViagemService {
@@ -26,6 +29,9 @@ export class ViagemService implements IViagemService {
     const onibus = await this.onibusRepository.findById(dadosViagem.onibusId);
     if (!onibus) {
       throw new OnibusNaoEncontrado();
+    }
+    if (onibus.numeroAssentos < dadosViagem.totalVagas) {
+      throw new OnibusInvalido();
     }
     const usuario = await this.usuarioRepository.findByIdWithViacao(idUsuario);
     const viagem = this.viagemFactory(dadosViagem, onibus, usuario.viacao);
@@ -60,8 +66,12 @@ export class ViagemService implements IViagemService {
       throw new ViagemSemAssentos();
     }
     const usuario = await this.usuarioRepository.findById(idUsuario);
+    const isComprado = viagem.usuarios.some(usuarioSome => usuarioSome.id === usuario.id)
+    if (isComprado) {
+      throw new IsReservado();
+    }
     viagem.usuarios.push(usuario);
-    await this.viagemRepository.update(idViagem, viagem);
+    await this.viagemRepository.save(viagem);
   }
 
   async listarViagens(filtro: ViagemFiltroDto): Promise<Viagem[]> {
@@ -80,12 +90,19 @@ export class ViagemService implements IViagemService {
     if (!filtro.dataInicio) {
       filtro.dataInicio = new Date();
     }
+    if (isNaN(filtro?.dataInicio.getTime())) {
+      throw new DataInvalida();
+    }
+    if (isNaN(filtro?.dataFinal.getTime())) {
+      throw new DataInvalida();
+    }
     filtro.dataFinal.setDate(filtro.dataInicio.getDate() + 7);
     return filtro;
   }
 
   private viagemFactory(dadosViagem: ViagemDto, onibus: Onibus, viacao: Viacao): Viagem {
     const viagem = new Viagem();
+    viagem.ativo = true;
     viagem.origem = dadosViagem.origem;
     viagem.destino = dadosViagem.destino;
     viagem.totalVagas = dadosViagem.totalVagas;

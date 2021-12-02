@@ -9,6 +9,7 @@ import { AdminCadastraFuncionario } from "../@types/errors/AdminCadastraFunciona
 import { ApenasAdminCadastraAdmin } from "../@types/errors/ApenasAdminCadastraAdmin";
 import { NaoPodeCriarAdminOuFunc } from "../@types/errors/NaoPodeCriarAdminOuFunc";
 import { RequestWithUsuario } from "../@types/middlewares/requestUserData";
+import { UpdateValuesMissingError } from "typeorm";
 
 @Service('UsuarioController')
 export class UsuarioController {
@@ -67,6 +68,10 @@ export class UsuarioController {
     } catch (error) {
       if (error instanceof UsuarioNaoEncontrado) {
         response.status(404).send("Usuário não encontrado no sistema");
+        return;
+      }
+      if (error instanceof UpdateValuesMissingError) {
+        response.status(422).send("Você não pode passar um objeto vazio");
         return;
       }
       throw error;

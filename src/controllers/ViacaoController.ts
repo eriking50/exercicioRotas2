@@ -4,6 +4,7 @@ import { IViacaoService } from "../@types/services/IViacaoService";
 import { ViacaoNaoEncontrada } from "../@types/errors/ViacaoNaoEncontrada";
 import { RequestWithUsuario } from "../@types/middlewares/requestUserData";
 import { ViacaoInvalida } from "../@types/errors/ViacaoInvalida";
+import { UpdateValuesMissingError } from "typeorm";
 
 @Service('ViacaoController')
 export class ViacaoController {
@@ -29,6 +30,14 @@ export class ViacaoController {
       }
       if (error instanceof ViacaoInvalida) {
         response.status(422).send("Você não pode atualizar uma viação que não seja a sua");
+        return;
+      }
+      if (error instanceof UpdateValuesMissingError) {
+        response.status(422).send("Você não pode passar um objeto vazio");
+        return;
+      }
+      if (error?.code === "ER_NO_DEFAULT_FOR_FIELD") {
+        response.status(400).send("Há campos obrigatórios que não foram informados");
         return;
       }
       throw error;

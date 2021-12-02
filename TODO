@@ -1,7 +1,7 @@
 Geral:
   ✔ Implementar erros próprios @done(21-12-01 16:21)
-  [] Apagar exemplos do Paulo do boilerplate
-  [] Testar
+  ✔ Apagar exemplos do Paulo do boilerplate @done(21-12-02 15:35)
+  ✔ Testar @done(21-12-02 15:29)
 Onibus:
   ✔ Atualizar criação de onibus depois que implementar viacao repo @done(21-11-30 20:33)
 Viacao:
