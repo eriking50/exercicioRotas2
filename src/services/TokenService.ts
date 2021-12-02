@@ -1,7 +1,9 @@
 import { UsuarioLogadoDTO } from "../@types/dto/UsuarioDto";
 import { sign, verify } from "jsonwebtoken";
 import { TokenDTO } from "../@types/dto/TokenDTO";
-import { Usuario } from "../models/UsuarioEntity";
+import { Service } from "typedi";
+
+@Service('TokenService')
 
 export class TokenService {
   verificarToken(token: string): UsuarioLogadoDTO {

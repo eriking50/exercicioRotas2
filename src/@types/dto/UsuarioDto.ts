@@ -10,6 +10,7 @@ export interface UsuarioDto {
 }
 
 export interface UsuarioRetornoDto {
+  id: number,
   nome: string,
   email: string,
   role?: Roles,

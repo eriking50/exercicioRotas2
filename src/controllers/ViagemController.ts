@@ -21,6 +21,7 @@ export class ViagemController {
     } catch (error) {
       if (error instanceof OnibusNaoEncontrado) {
         response.status(404).send("Onibus não encontrado no sistema");
+        return;
       }
       throw error;
     }
@@ -34,9 +35,11 @@ export class ViagemController {
     } catch (error) {
       if (error instanceof ViagemNaoEncontrada) {
         response.status(404).send("Viagem não encontrada no sistema");
+        return;
       }
       if (error instanceof ViacaoInvalida) {
         response.status(422).send("Você não pode alterar viagens de outra viação");
+        return;
       }
       throw error;
     }
@@ -74,12 +77,15 @@ export class ViagemController {
     } catch (error) {
       if (error instanceof ViagemNaoEncontrada) {
         response.status(404).send("Viagem não encontrada no sistema");
+        return;
       }
       if (error instanceof ViagemInativa) {
         response.status(422).send("Viagem não está ativa no sistema");
+        return;
       }
       if (error instanceof ViagemSemAssentos) {
         response.status(422).send("Viagem não possui assentos disponíveis");
+        return;
       }
       throw error;
     }

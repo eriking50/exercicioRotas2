@@ -2,6 +2,8 @@ import { Inject, Service } from "typedi";
 import {Request, Response} from "express";
 import { IViacaoService } from "../@types/services/IViacaoService";
 import { ViacaoNaoEncontrada } from "../@types/errors/ViacaoNaoEncontrada";
+import { RequestWithUsuario } from "../@types/middlewares/requestUserData";
+import { ViacaoInvalida } from "../@types/errors/ViacaoInvalida";
 
 @Service('ViacaoController')
 export class ViacaoController {
@@ -15,14 +17,19 @@ export class ViacaoController {
       throw error;
     }
   }
-  async atualizarViacao(request: Request, response: Response): Promise<void> {
+  async atualizarViacao(request: RequestWithUsuario, response: Response): Promise<void> {
     try {
       const { id } = request.params;
-      await this.viacaoService.atualizarViacao(Number(id), request.body);
+      await this.viacaoService.atualizarViacao(Number(id), request.body, request?.usuario?.id);
       response.status(204).send();
     } catch (error) {
       if (error instanceof ViacaoNaoEncontrada) {
         response.status(404).send("Viacao não encontrada no sistema");
+        return;
+      }
+      if (error instanceof ViacaoInvalida) {
+        response.status(422).send("Você não pode atualizar uma viação que não seja a sua");
+        return;
       }
       throw error;
     }

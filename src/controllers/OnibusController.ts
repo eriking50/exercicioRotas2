@@ -15,6 +15,7 @@ export class OnibusController {
     } catch (error) {
       if (error instanceof ViacaoNaoEncontrada) {
         response.status(404).send("Viação não encontrada no sistema");
+        return;
       }
       throw error;
     }
@@ -27,6 +28,7 @@ export class OnibusController {
     } catch (error) {
       if (error instanceof OnibusNaoEncontrado) {
         response.status(404).send("Onibus não encontrado no sistema");
+        return;
       }
       throw error;
     }
