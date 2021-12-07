@@ -28,9 +28,28 @@ export class UsuarioController {
     }
   }
 
-  async adicionarUsuario(request: RequestWithUsuario, response: Response): Promise<void> {
+  async adicionarPassageiro(request: Request, response: Response): Promise<void> {
     try {
-      const usuario = await this.usuarioService.criarUsuario(request.body, request?.usuario?.id);
+      request.body.role = 0;
+      const usuario = await this.usuarioService.criarUsuario(request.body);
+      response.status(201).send(usuario);
+    } catch (error) {
+      if (error instanceof EmailInvalido) {
+        response.status(400).send("Email inválido");
+        return;
+      }
+      if (error?.code === "ER_DUP_ENTRY") {
+        response.status(400).send("Email já cadastrado no sistema");
+        return;
+      }
+      throw error;
+    }
+  }
+
+  async adicionarFuncionario(request: Request, response: Response): Promise<void> {
+    try {
+      request.body.role = 1;
+      const usuario = await this.usuarioService.criarUsuario(request.body);
       response.status(201).send(usuario);
     } catch (error) {
       if (error instanceof ViacaoNaoEncontrada) {
@@ -47,6 +66,28 @@ export class UsuarioController {
       }
       if (error instanceof AdminCadastraFuncionario) {
         response.status(422).send("Para um admin cadastrar um funcionário é necessário informar a viação");
+        return;
+      }
+      if (error instanceof NaoPodeCriarAdminOuFunc) {
+        response.status(422).send("Sem estar logado só pode ser cadastrado passageiros");
+        return;
+      }
+      throw error;
+    }
+  }
+
+  async adicionarAdmin(request: RequestWithUsuario, response: Response): Promise<void> {
+    try {
+      request.body.role = 2;
+      const usuario = await this.usuarioService.criarUsuario(request.body, request?.usuario?.id);
+      response.status(201).send(usuario);
+    } catch (error) {
+      if (error instanceof EmailInvalido) {
+        response.status(400).send("Email inválido");
+        return;
+      }
+      if (error?.code === "ER_DUP_ENTRY") {
+        response.status(400).send("Email já cadastrado no sistema");
         return;
       }
       if (error instanceof ApenasAdminCadastraAdmin) {
