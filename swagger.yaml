@@ -1,0 +1,603 @@
+swagger: "2.0"
+info:
+  title: 'Exercício de Rotas'
+  description: 'Exercício de rotas do RaroAcademy'
+
+  version: '1.0'
+host: '127.0.0.1:3003'
+tags:
+  - name: 'usuarios'
+    description: 'Rotas de Usuário'
+  - name: 'onibus'
+    description: 'Rotas de Onibus'
+  - name: 'viacoes'
+    description: 'Rotas de Viacao'
+  - name: 'viagens'
+    description: 'Rotas de Viagem'
+paths:
+  /usuarios/signin:
+    post:
+      tags:
+        - 'usuarios'
+      summary: 'Usuário valida seus dados'
+      parameters:
+      - in: "body"
+        name: "Login e senha"
+        description: "Dados do usuário para serem cadastrados pelo sistema"
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        '200':
+          description: 'Token para o usuário logado'
+          schema:
+            $ref: "#/definitions/Token"
+        '422':
+          description: 'Usuario ou senha não encontrados'
+  /usuarios/:
+    post:
+      tags:
+        - 'usuarios'
+      summary: 'Cadastra um passageiro no sistema'
+      parameters:
+      - in: "body"
+        name: "Dados passageiro"
+        description: "Cadastra um novo passageiro no sistema"
+        required: true
+        schema:
+          $ref: "#/definitions/UsuarioCriar"
+      responses:
+        '201':
+          description: 'Novo passageiro cadastrado com sucesso'
+          schema:
+            $ref: "#/definitions/UsuarioRetorno"
+        '400':
+          description: 'Erro no envio de dados para o sistema'
+        '404':
+          description: 'Viacao não encontrada'
+        '422':
+          description: 'Erro na validação dos dados'
+  /usuarios/funcionario/:
+    post:
+      tags:
+        - 'usuarios'
+      summary: 'Cadastra um funcionário no sistema'
+      parameters:
+      - in: "body"
+        name: "Dados funcionário"
+        description: "Cadastra um novo funcionário no sistema"
+        required: true
+        schema:
+          $ref: "#/definitions/UsuarioCriar"
+      responses:
+        '201':
+          description: 'Novo funcionário cadastrado com sucesso'
+          schema:
+            $ref: "#/definitions/UsuarioRetorno"
+        '400':
+          description: 'Erro no envio de dados para o sistema'
+        '404':
+          description: 'Viacao não encontrada'
+        '422':
+          description: 'Erro na validação dos dados'
+      security:
+      - api_key: []
+  /usuarios/admin/:
+    post:
+      tags:
+        - 'usuarios'
+      summary: 'Cadastra um admin no sistema'
+      parameters:
+      - in: "body"
+        name: "Dados admin"
+        description: "Cadastra um novo admin no sistema"
+        required: true
+        schema:
+          $ref: "#/definitions/UsuarioCriar"
+      responses:
+        '201':
+          description: 'Novo admin cadastrado com sucesso'
+          schema:
+            $ref: "#/definitions/UsuarioRetorno"
+        '400':
+          description: 'Erro no envio de dados para o sistema'
+        '404':
+          description: 'Viacao não encontrada'
+        '422':
+          description: 'Erro na validação dos dados'
+      security:
+      - api_key: []
+  /usuarios/{id}:
+    get:
+      tags:
+        - 'usuarios'
+      summary: 'Retorna um usuário pelo seu id'
+      parameters:
+      - name: 'id'
+        in: 'path'
+        description: 'Id do usuário'
+        required: true
+        type: 'integer'
+        format: 'int32'
+      responses:
+        '200':
+          description: 'Dados do usuário do Id especificado'
+          schema:
+            $ref: "#/definitions/UsuarioRetorno"
+      security:
+      - api_key: []
+    patch:
+      tags:
+        - 'usuarios'
+      summary: 'Atualiza dos dados do usuário'
+      parameters:
+      - name: 'id'
+        in: 'path'
+        description: 'Id do usuário'
+        required: true
+        type: 'integer'
+        format: 'int32'
+      - name: ''
+        in: 'body'
+        schema:
+          $ref: "#/definitions/UsuarioAtualizar"
+      responses:
+        '204':
+          description: 'Usuário atualizado com sucesso'
+        '404':
+          description: 'Usuário não encontrado'
+      security:
+      - api_key: []
+    delete:
+      tags:
+        - 'usuarios'
+      summary: 'Deleta um usuário específico pelo seu Id'
+      parameters:
+      - name: 'id'
+        in: 'path'
+        description: 'Id do usuário'
+        required: true
+        type: 'integer'
+        format: 'int32'
+      responses:
+        '204':
+          description: 'Usuário deletado com sucesso'
+        '404':
+          description: 'Usuário não encontrado'
+      security:
+      - api_key: []
+  /onibus/:
+    get:
+      tags:
+        - 'onibus'
+      summary: 'Retorna toda frota de ônibus'
+      responses:
+        '200':
+          description: 'Frota de ônibus'
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Onibus"
+      security:
+      - api_key: []
+    post:
+      tags:
+        - 'onibus'
+      summary: 'Cadastra um ônibus no sistema'
+      parameters:
+      - in: "body"
+        name: "Dados ônibus"
+        description: "Cadastra um novo ônibus no sistema"
+        required: true
+        schema:
+          $ref: "#/definitions/OnibusCriar"
+      responses:
+        '201':
+          description: 'Novo usuário cadastrado com sucesso'
+          schema:
+            $ref: "#/definitions/Onibus"
+        '400':
+          description: 'Erro no envio de dados para o sistema'
+        '404':
+          description: 'Viacao não encontrada'
+      security:
+      - api_key: []
+  /onibus/{id}:
+    get:
+      tags:
+        - 'onibus'
+      summary: 'Retorna um ônibus pelo seu id'
+      parameters:
+      - name: 'id'
+        in: 'path'
+        description: 'Id do ônibus'
+        required: true
+        type: 'integer'
+        format: 'int32'
+      responses:
+        '200':
+          description: 'Dados do ônibus do Id especificado'
+          schema:
+            $ref: "#/definitions/Onibus"
+      security:
+      - api_key: []
+    patch:
+      tags:
+        - 'onibus'
+      summary: 'Atualiza os dados do ônibus especificado'
+      parameters:
+      - name: 'id'
+        in: 'path'
+        description: 'Id do ônibus'
+        required: true
+        type: 'integer'
+        format: 'int32'
+      - name: ''
+        in: 'body'
+        schema:
+          $ref: "#/definitions/OnibusAtualizar"
+      responses:
+        '204':
+          description: 'Ônibus atualizado com sucesso'
+        '404':
+          description: 'Ônibus não encontrado'
+        '400':
+          description: 'Erro ao enviar dados'
+        '422':
+          description: 'Erro ao validar dados'
+      security:
+      - api_key: []
+  /viacoes/:
+    get:
+      tags:
+        - 'viacoes'
+      summary: 'Retorna todas as viações'
+      responses:
+        '200':
+          description: 'Todas viações cadastradas'
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Viacao"
+      security:
+      - api_key: []
+    post:
+      tags:
+        - 'viacoes'
+      summary: 'Cadastra uma nova viação no sistema'
+      parameters:
+      - in: "body"
+        name: "Dados da viação"
+        description: "Cadastra uma nova viação no sistema"
+        required: true
+        schema:
+          $ref: "#/definitions/ViacaoCriar"
+      responses:
+        '201':
+          description: 'Novo usuário cadastrado com sucesso'
+          schema:
+            $ref: "#/definitions/Viacao"
+      security:
+      - api_key: []
+  /viacoes/{id}:
+    get:
+      tags:
+        - 'viacoes'
+      summary: 'Retorna uma viação pelo seu id'
+      parameters:
+      - name: 'id'
+        in: 'path'
+        description: 'Id da viação'
+        required: true
+        type: 'integer'
+        format: 'int32'
+      responses:
+        '200':
+          description: 'Dados da viação do Id especificado'
+          schema:
+            $ref: "#/definitions/Viacao"
+      security:
+      - api_key: []
+    patch:
+      tags:
+        - 'viacoes'
+      summary: 'Atualiza os dados da viação do Id especificado'
+      parameters:
+      - name: 'id'
+        in: 'path'
+        description: 'Id do ônibus'
+        required: true
+        type: 'integer'
+        format: 'int32'
+      - name: ''
+        in: 'body'
+        schema:
+          $ref: "#/definitions/ViacaoAtualizar"
+      responses:
+        '204':
+          description: 'Viação atualizada com sucesso'
+        '404':
+          description: 'Viação não encontrada'
+        '400':
+          description: 'Erro ao enviar dados'
+        '422':
+          description: 'Erro ao validar dados'
+      security:
+      - api_key: []
+  /viagens/:
+    get:
+      tags:
+        - 'viagens'
+      summary: 'Retorna todas as viagens'
+      responses:
+        '200':
+          description: 'Todas viagens cadastradas'
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Viagem"
+      security:
+      - api_key: []
+    post:
+      tags:
+        - 'viagens'
+      summary: 'Cadastra uma nova viagem no sistema'
+      parameters:
+      - in: "body"
+        name: "Dados da viagem"
+        description: "Cadastra uma nova viagem no sistema"
+        required: true
+        schema:
+          $ref: "#/definitions/ViagemCriar"
+      responses:
+        '201':
+          description: 'Novo usuário cadastrado com sucesso'
+          schema:
+            $ref: "#/definitions/Viagem"
+        '404':
+          description: 'Onibus não encontrado'
+        '400':
+          description: 'Erro ao enviar dados'
+        '422':
+          description: 'Erro ao validar dados'
+      security:
+      - api_key: []
+  /viagens/{id}:
+    get:
+      tags:
+        - 'viagens'
+      summary: 'Retorna uma viagem pelo seu id'
+      parameters:
+      - name: 'id'
+        in: 'path'
+        description: 'Id da viação'
+        required: true
+        type: 'integer'
+        format: 'int32'
+      responses:
+        '200':
+          description: 'Dados da viagem do Id especificado'
+          schema:
+            $ref: "#/definitions/Viagem"
+      security:
+      - api_key: []
+    patch:
+      tags:
+        - 'viagens'
+      summary: 'Atualiza os dados da viagem do Id especificado'
+      parameters:
+      - name: 'id'
+        in: 'path'
+        description: 'Id do ônibus'
+        required: true
+        type: 'integer'
+        format: 'int32'
+      - name: ''
+        in: 'body'
+        schema:
+          $ref: "#/definitions/ViagemAtualizar"
+      responses:
+        '204':
+          description: 'Viação atualizada com sucesso'
+        '404':
+          description: 'Viagem não encontrada'
+        '400':
+          description: 'Erro ao enviar dados'
+        '422':
+          description: 'Erro ao validar dados'
+      security:
+      - api_key: []
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+definitions:
+  Login:
+    type: "object"
+    required:
+    - "email"
+    - "senha"
+    properties: 
+      email:
+        type: "string"
+      senha:
+        type: "string"
+  Token:
+    type: "object"
+    properties: 
+      token: 
+        type: "string"
+  UsuarioCriar:
+    type: "object"
+    required:
+    - "email"
+    - "senha"
+    - "nome"
+    properties: 
+      email:
+        type: "string"
+      senha:
+        type: "string"
+      nome:
+        type: "string"
+      viacaoId:
+        type: "integer"
+  UsuarioAtualizar:
+    type: "object"
+    properties: 
+      senha:
+        type: "string"
+      nome:
+        type: "string"
+  UsuarioRetorno:
+    type: "object"
+    properties: 
+      login:
+        type: "string"
+      email:
+        type: "string"
+      role:
+        type: "integer"
+        enum:
+          - "passageiro"
+          - "funcionario"
+          - "admin"
+      viacao:
+        $ref: "#/definitions/Viacao"
+  Onibus:
+    type: "object"
+    properties: 
+      marca:
+        type: "string"
+      ano:
+        type: "integer"
+      numeroAssentos:
+        type: "integer"
+      placa:
+        type: "string"
+      status: 
+        type: "integer"
+        enum:
+          - "disponível"
+          - "emViagem"
+          - "emManutencao"
+          - "inativo"
+      viacao:
+        $ref: "#/definitions/Viacao"
+  OnibusCriar:
+    type: "object"
+    required:
+    - "marca"
+    - "ano"
+    - "placa"
+    - "numeroAssentos"
+    properties: 
+      marca:
+        type: "string"
+      ano:
+        type: "integer"
+      numeroAssentos:
+        type: "integer"
+      placa:
+        type: "string"
+      status: 
+        type: "integer"
+        enum:
+          - "disponível"
+          - "emViagem"
+          - "emManutencao"
+          - "inativo"
+  OnibusAtualizar:
+    type: "object"
+    properties: 
+      id:
+        type: "integer"
+      marca:
+        type: "string"
+      ano:
+        type: "integer"
+      numeroAssentos:
+        type: "integer"
+      placa:
+        type: "string"
+      status: 
+        type: "integer"
+        enum:
+          - "disponível"
+          - "emViagem"
+          - "emManutencao"
+          - "inativo"
+  Viacao:
+    type: "object"
+    properties: 
+      id:
+        type: "integer"
+      nome:
+        type: "string"
+      cnpj:
+        type: "string"
+  ViacaoCriar:
+    type: "object"
+    required:
+      - "nome"
+      - "cnpj"
+    properties: 
+      nome:
+        type: "string"
+      cnpj:
+        type: "string"
+  ViacaoAtualizar:
+    type: "object"
+    properties: 
+      nome:
+        type: "string"
+      cnpj:
+        type: "string"
+  Viagem:
+    type: "object"
+    properties: 
+      origem:
+        type: "string"
+      destino:
+        type: "string"
+      dataPartida:
+        type: "string"
+        format: "date-time"
+      totalVagas:
+        type: "string"
+      ativo:
+        type: "boolean"
+      viacao:
+        $ref:  "#/definitions/Viacao"
+      onibus:
+        $ref:  "#/definitions/Onibus"
+  ViagemCriar:
+    type: "object"
+    required:
+      - "origem"
+      - "destino"
+      - "dataPartida"
+      - "totalVagas"
+    properties: 
+      origem:
+        type: "string"
+      destino:
+        type: "string"
+      dataPartida:
+        type: "string"
+        format: "date-time"
+      totalVagas:
+        type: "string"
+      ativo:
+        type: "boolean"
+      onibusId:
+        type: "integer"
+  ViagemAtualizar:
+    type: "object"
+    properties:
+      ativo:
+        type: "boolean" 
+      dataPartida:
+        type: "string"
+        format: "date-time"
