@@ -38,17 +38,65 @@ paths:
     post:
       tags:
         - 'usuarios'
-      summary: 'Cadastra um usuário no sistema'
+      summary: 'Cadastra um passageiro no sistema'
       parameters:
       - in: "body"
-        name: "Dados usuário"
-        description: "Cadastra um novo usuário no sistema"
+        name: "Dados passageiro"
+        description: "Cadastra um novo passageiro no sistema"
         required: true
         schema:
           $ref: "#/definitions/UsuarioCriar"
       responses:
         '201':
-          description: 'Novo usuário cadastrado com sucesso'
+          description: 'Novo passageiro cadastrado com sucesso'
+          schema:
+            $ref: "#/definitions/UsuarioRetorno"
+        '400':
+          description: 'Erro no envio de dados para o sistema'
+        '404':
+          description: 'Viacao não encontrada'
+        '422':
+          description: 'Erro na validação dos dados'
+  /usuarios/funcionario/:
+    post:
+      tags:
+        - 'usuarios'
+      summary: 'Cadastra um funcionário no sistema'
+      parameters:
+      - in: "body"
+        name: "Dados funcionário"
+        description: "Cadastra um novo funcionário no sistema"
+        required: true
+        schema:
+          $ref: "#/definitions/UsuarioCriar"
+      responses:
+        '201':
+          description: 'Novo funcionário cadastrado com sucesso'
+          schema:
+            $ref: "#/definitions/UsuarioRetorno"
+        '400':
+          description: 'Erro no envio de dados para o sistema'
+        '404':
+          description: 'Viacao não encontrada'
+        '422':
+          description: 'Erro na validação dos dados'
+      security:
+      - api_key: []
+  /usuarios/admin/:
+    post:
+      tags:
+        - 'usuarios'
+      summary: 'Cadastra um admin no sistema'
+      parameters:
+      - in: "body"
+        name: "Dados admin"
+        description: "Cadastra um novo admin no sistema"
+        required: true
+        schema:
+          $ref: "#/definitions/UsuarioCriar"
+      responses:
+        '201':
+          description: 'Novo admin cadastrado com sucesso'
           schema:
             $ref: "#/definitions/UsuarioRetorno"
         '400':
@@ -393,12 +441,6 @@ definitions:
         type: "string"
       nome:
         type: "string"
-      role:
-        type: "integer"
-        enum:
-          - "passageiro"
-          - "funcionario"
-          - "admin"
       viacaoId:
         type: "integer"
   UsuarioAtualizar:
